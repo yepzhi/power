@@ -245,6 +245,14 @@
                 <h1>Analytics <span>Insights</span></h1>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Native Data Console — Richmond Pro</p>
             </div>
+            <div class="header-filters" style="display: flex; align-items: center; gap: 15px;">
+                <label for="colegio-select" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Colegio:</label>
+                <select id="colegio-select" style="background: var(--glass-bg); border: 1px solid var(--border); color: #fff; padding: 10px 16px; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; cursor: pointer; backdrop-filter: blur(10px); appearance: none; -webkit-appearance: none; padding-right: 36px; background-image: url('data:image/svg+xml;utf8,<svg fill=%22%23277eff%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/></svg>'); background-repeat: no-repeat; background-position: right 8px center;">
+                    <option value="all" style="background: var(--bg-deep);">Todos los Colegios</option>
+                    <option value="son30235p" style="background: var(--bg-deep);" selected>SON30235P - UTH UNIVERSIDAD TECNOLÓGICA DE HERMOSILLO</option>
+                    <option value="que302890" style="background: var(--bg-deep);">QUE302890 - Universidad Tecnológica de San Juan del Rio</option>
+                </select>
+            </div>
         </header>
 
         <!-- KPI Summary -->
@@ -354,6 +362,20 @@
                     legend: {
                         position: 'right',
                         labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed.toFixed(2) + '%';
+                                }
+                                return label;
+                            }
+                        }
                     }
                 }
             }
