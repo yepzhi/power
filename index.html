@@ -304,7 +304,7 @@
     <!-- ── SCRIPTS ── -->
     <script>
         // ── Initialization of Tom Select (Searchable Dropdown) ──
-        new TomSelect("#filter-colegio",{
+        const tsColegio = new TomSelect("#filter-colegio",{
             create: false,
             sortField: { field: "text", direction: "asc" }
         });
@@ -445,8 +445,8 @@
         });
 
         // ── SIMULATE DATA FILTERING ──
-        // When a filter is changed, randomize data slightly to simulate connecting to backend
-        document.getElementById('filter-colegio').addEventListener('change', simulateDataLoad);
+        // Bind to TomSelect instance for the search filter
+        tsColegio.on('change', simulateDataLoad);
         document.getElementById('filter-rol').addEventListener('change', simulateDataLoad);
         document.getElementById('filter-date').addEventListener('change', simulateDataLoad);
 
