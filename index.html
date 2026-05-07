@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Dashboard | Richmond Pro</title>
+    <title>Native Analytics Dashboard | Richmond Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg-deep: #050510;
             --bg-card: rgba(255, 255, 255, 0.03);
             --primary: #277eff;
+            --primary-glow: rgba(39, 126, 255, 0.5);
             --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.5);
+            --success: #00e676;
+            --warning: #ffb74d;
             --border: rgba(39, 126, 255, 0.2);
             --text: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.6);
@@ -20,11 +25,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg-deep);
@@ -37,9 +38,7 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .font-head {
-            font-family: 'Outfit', sans-serif;
-        }
+        h1, h2, h3, .font-head { font-family: 'Outfit', sans-serif; }
 
         /* ── Layout ── */
         .dashboard-container {
@@ -62,9 +61,7 @@
             text-transform: uppercase;
         }
 
-        .header-title span {
-            color: var(--primary);
-        }
+        .header-title span { color: var(--primary); }
 
         /* ── KPI Row ── */
         .kpi-row {
@@ -81,6 +78,16 @@
             padding: 24px;
             backdrop-filter: blur(12px);
             transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0.5;
         }
 
         .kpi-card:hover {
@@ -117,9 +124,7 @@
         }
 
         @media (min-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1.2fr 1fr;
-            }
+            .main-grid { grid-template-columns: 1fr 1fr; }
         }
 
         .card {
@@ -128,18 +133,9 @@
             border-radius: 24px;
             padding: 30px;
             position: relative;
-            overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            opacity: 0.8;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-header {
@@ -155,35 +151,71 @@
             letter-spacing: -0.01em;
         }
 
-        /* ── Power BI Placeholder ── */
-        .iframe-container {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: rgba(0,0,0,0.2);
-            border-radius: 16px;
-            border: 1px dashed var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 12px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
+        .chart-container {
             position: relative;
-        }
-
-        .iframe-container iframe {
-            position: absolute;
-            top: 0; left: 0;
+            flex-grow: 1;
+            min-height: 250px;
             width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 16px;
         }
 
-        .placeholder-icon {
-            font-size: 2.5rem;
-            opacity: 0.5;
+        /* ── Leaderboard Table ── */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .leaderboard-table th {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            font-weight: 600;
+        }
+
+        .leaderboard-table td {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .leaderboard-table tr:last-child td { border-bottom: none; }
+
+        .rank {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: var(--text-muted);
+            width: 30px;
+        }
+
+        .rank-1 { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+        .rank-2 { color: var(--primary); }
+        .rank-3 { color: #fff; }
+
+        .score-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .score-val {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: right;
         }
 
         /* ── Bottom Section ── */
@@ -197,11 +229,7 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
@@ -215,7 +243,7 @@
         <header class="fade-in">
             <div class="header-title">
                 <h1>Analytics <span>Insights</span></h1>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Richmond Pro Educational Data Console</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Native Data Console — Richmond Pro</p>
             </div>
         </header>
 
@@ -234,57 +262,180 @@
                 <div class="kpi-value">5,842 <span>+15%</span></div>
             </div>
             <div class="kpi-card">
-                <p class="kpi-label">Tiempo Promedio</p>
-                <div class="kpi-value">42:15 <span>min</span></div>
+                <p class="kpi-label">Test Realizados</p>
+                <div class="kpi-value">37,997 <span>+22%</span></div>
             </div>
         </div>
 
         <!-- Main Analytics Area -->
         <div class="main-grid">
             
-            <!-- Sesiones por Dispositivo -->
+            <!-- Sesiones por Dispositivo (Native Chart) -->
             <div class="card fade-in delay-2">
                 <div class="card-header">
-                    <h3 class="card-title">Distribución por Dispositivo</h3>
-                    <div style="font-size: 0.7rem; color: var(--accent); font-weight: 800; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 99px;">REAL-TIME</div>
+                    <h3 class="card-title">Sesiones por Dispositivo</h3>
+                    <div style="font-size: 0.7rem; color: var(--accent); font-weight: 800; border: 1px solid var(--accent); padding: 4px 10px; border-radius: 99px;">2026</div>
                 </div>
-                <div class="iframe-container">
-                    <iframe title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" frameborder="0" allowFullScreen="true" style="width:100%; height:100%; border-radius:16px;"></iframe>
+                <div class="chart-container">
+                    <canvas id="deviceChart"></canvas>
                 </div>
             </div>
 
-            <!-- Teacher Leaderboard -->
+            <!-- Teacher Leaderboard (Native HTML) -->
             <div class="card fade-in delay-2">
                 <div class="card-header">
-                    <h3 class="card-title">Top Professors Ranking</h3>
+                    <h3 class="card-title">Top Professors (Assignments)</h3>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary)"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </div>
-                <div class="iframe-container">
-                    <iframe title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" frameborder="0" allowFullScreen="true" style="width:100%; height:100%; border-radius:16px;"></iframe>
-                </div>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">#</th>
+                            <th>Profesor</th>
+                            <th style="text-align: right;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacher-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
 
-            <!-- Full Width Trends -->
+            <!-- Tendencia Mensual (Native Chart) -->
             <div class="card full-width-card fade-in delay-3">
                 <div class="card-header">
-                    <h3 class="card-title">Tendencia Mensual de Desempeño</h3>
+                    <h3 class="card-title">Tendencia Mensual de Sesiones</h3>
                     <div style="display: flex; gap: 20px;">
-                        <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px;"><div style="width: 10px; height: 10px; background: var(--primary); border-radius: 50%;"></div> Sesiones</span>
-                        <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px;"><div style="width: 10px; height: 10px; background: var(--accent); border-radius: 50%;"></div> Assignments</span>
+                        <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px; color: var(--text-muted);"><div style="width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent-glow);"></div> Crecimiento General</span>
                     </div>
                 </div>
-                <div class="iframe-container" style="aspect-ratio: 21/7;">
-                    <iframe title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" frameborder="0" allowFullScreen="true" style="width:100%; height:100%; border-radius:16px;"></iframe>
+                <div class="chart-container" style="min-height: 350px;">
+                    <canvas id="trendChart"></canvas>
                 </div>
             </div>
 
         </div>
 
-        <footer style="margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--glass-border); padding-top: 30px;">
-            <p>&copy; 2026 Richmond Pro Platform. Powered by Microsoft Power BI Embedded.</p>
+        <footer style="margin-top: 60px; text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--glass-border); padding-top: 30px; padding-bottom: 40px;">
+            <p>&copy; 2026 Richmond Pro Platform. Native Data Visualization.</p>
         </footer>
 
     </div>
 
+    <!-- Chart.js Configuration -->
+    <script>
+        // Global Chart Defaults for Dark Theme
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.6)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        // 1. Device Doughnut Chart
+        const ctxDevice = document.getElementById('deviceChart').getContext('2d');
+        new Chart(ctxDevice, {
+            type: 'doughnut',
+            data: {
+                labels: ['Laptop', 'Smartphone', 'Tablet', 'App'],
+                datasets: [{
+                    data: [45, 35, 10, 10],
+                    backgroundColor: [
+                        '#277eff', // Primary
+                        '#00f2ff', // Accent
+                        '#8a2be2', // Purple
+                        '#00e676'  // Green
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 20, usePointStyle: true, pointStyle: 'circle' }
+                    }
+                }
+            }
+        });
+
+        // 2. Trend Line Chart
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        
+        // Create Gradient for Line Chart
+        let gradient = ctxTrend.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(0, 242, 255, 0.5)');
+        gradient.addColorStop(1, 'rgba(0, 242, 255, 0.0)');
+
+        new Chart(ctxTrend, {
+            type: 'line',
+            data: {
+                labels: ['Aug 2025', 'Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026'],
+                datasets: [{
+                    label: 'Sesiones Mes',
+                    data: [15000, 25000, 26000, 28000, 18000, 19000, 30000, 38000, 150000],
+                    borderColor: '#00f2ff',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#050510',
+                    pointBorderColor: '#00f2ff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                        ticks: {
+                            callback: function(value) {
+                                return value >= 1000 ? (value / 1000) + 'K' : value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Populate Native Teacher Leaderboard
+        const teachers = [
+            { name: "Teacher Jorge", score: 362 },
+            { name: "GRACIELA VILLANUEVA", score: 315 },
+            { name: "Yumayra Alejandra Cordova", score: 243 },
+            { name: "Abril MARTINEZ", score: 187 },
+            { name: "Monica Verdugo", score: 156 },
+            { name: "Sachenka García", score: 141 }
+        ];
+
+        const maxScore = teachers[0].score;
+        const tbody = document.getElementById('teacher-tbody');
+
+        teachers.forEach((t, i) => {
+            const rankClass = i < 3 ? `rank-${i+1}` : '';
+            const percent = (t.score / maxScore) * 100;
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="rank ${rankClass}">${i + 1}</td>
+                <td>
+                    <div style="color: #fff;">${t.name}</div>
+                    <div class="score-bar-bg">
+                        <div class="score-bar-fill" style="width: ${percent}%;"></div>
+                    </div>
+                </td>
+                <td class="score-val">${t.score}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    </script>
 </body>
 </html>
