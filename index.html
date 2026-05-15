@@ -114,7 +114,8 @@
         .card-title svg { color: var(--primary); }
 
         .iframe-wrapper { 
-            width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 18px; 
+            width: 100%; height: 85vh; min-height: 600px;
+            background: #000; border-radius: 18px; 
             overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
             position: relative;
         }
@@ -149,6 +150,34 @@
             color: var(--accent);
             width: 16px; height: 16px;
         }
+
+        /* ── Mobile Adjustments ── */
+        @media (max-width: 768px) {
+            .metrics-pills {
+                gap: 8px !important;
+                margin-top: 20px !important;
+            }
+            .pill {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                gap: 5px;
+            }
+            .pill svg {
+                width: 14px; height: 14px;
+            }
+            .card {
+                padding: 10px;
+                border-radius: 16px;
+            }
+            .dashboard-container {
+                padding: 10px;
+            }
+            .iframe-wrapper {
+                height: 85vh;
+                min-height: 500px;
+                border-radius: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -174,7 +203,7 @@
             <div class="grid-main">
                 <div class="card full-card">
 
-                    <div class="iframe-wrapper" style="aspect-ratio: 21/9;">
+                    <div class="iframe-wrapper">
                         <iframe id="iframe-trend" title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" allowFullScreen="true"></iframe>
                     </div>
                 </div>
