@@ -8,9 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Tom Select for Searchable Dropdowns -->
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+
 
     <style>
         :root {
@@ -140,89 +138,8 @@
             </div>
         </header>
 
-        <!-- SEARCH FILTERS -->
-        <div class="filters-bar">
-            <div class="filter-group">
-                <label>Target School / Network</label>
-                <select id="school-selector" placeholder="Search school name or ID...">
-                    <option value="all">Global Educational Network</option>
-                    <option value="son">SON30235P - UTH UNIVERSIDAD TECNOLÓGICA DE HERMOSILLO</option>
-                    <option value="que">QUE302890 - UT SAN JUAN DEL RIO</option>
-                    <option value="jal">JAL120002 - UDG UNIVERSIDAD DE GUADALAJARA</option>
-                    <option value="nl">NL450011 - TEC MONTERREY</option>
-                </select>
-            </div>
-            <div class="filter-group" style="flex: 0.5; min-width: 180px;">
-                <label>User Role</label>
-                <select id="role-selector">
-                    <option value="all">All Roles</option>
-                    <option value="teacher">Teachers</option>
-                    <option value="student">Students</option>
-                </select>
-            </div>
-            <div class="filter-group" style="flex: 0.5; min-width: 180px;">
-                <label>Time Period</label>
-                <select id="time-selector">
-                    <option value="y2026">2026 Academic Year</option>
-                    <option value="q1" selected>First Quarter (Q1)</option>
-                    <option value="m1">Current Month</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- TABS -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="switchTab('strategic')">Strategic View</button>
-            <button class="tab-btn" onclick="switchTab('operational')">Operational View</button>
-        </div>
-
-        <!-- STRATEGIC VIEW -->
-        <div id="tab-strategic" class="tab-content active">
-            
-            <div class="kpi-row">
-                <div class="kpi-card">
-                    <p class="kpi-label">Total Accesses</p>
-                    <div class="kpi-value" id="val-total">214.9K <span class="kpi-trend up">↑ 12%</span></div>
-                </div>
-                <div class="kpi-card">
-                    <p class="kpi-label">Unique Users</p>
-                    <div class="kpi-value" id="val-unique">37,997 <span class="kpi-trend up">↑ 8%</span></div>
-                </div>
-                <div class="kpi-card">
-                    <p class="kpi-label">Adoption Rate</p>
-                    <div class="kpi-value" id="val-adoption">84.5% <span class="kpi-trend up">↑ 5%</span></div>
-                </div>
-                <div class="kpi-card">
-                    <p class="kpi-label">Avg. Session</p>
-                    <div class="kpi-value" id="val-avg">42m <span class="kpi-trend up">↑ 2m</span></div>
-                </div>
-            </div>
-
-            <div class="grid-main">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Digital Access Gap</h3>
-                        <div style="background: var(--accent); color: #000; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 20px;">LIVE DATA</div>
-                    </div>
-                    <div class="iframe-wrapper">
-                        <iframe id="iframe-gap" title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" allowFullScreen="true"></iframe>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Top Professors Ranking</h3>
-                        <div style="background: var(--primary); color: #fff; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 20px;">TOP DRIVERS</div>
-                    </div>
-                    <div class="iframe-wrapper">
-                        <iframe id="iframe-rank" title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" allowFullScreen="true"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- OPERATIONAL VIEW -->
-        <div id="tab-operational" class="tab-content">
+        <div id="tab-operational">
             <div class="grid-main">
                 <div class="card full-card">
                     <div class="card-header">
@@ -241,49 +158,6 @@
 
     </div>
 
-    <script>
-        const baseUrl = "https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true";
-        
-        // Init Tom Select
-        const tsColegio = new TomSelect("#school-selector", { 
-            create: false, 
-            sortField: { field: "text", direction: "asc" } 
-        });
 
-        // Tab Switcher
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById('tab-' + tabId).classList.add('active');
-        }
-
-        // Logic to update iframes with URL filtering
-        function updateFilters() {
-            const selectedVal = tsColegio.getValue();
-            let filterString = "";
-            
-            if (selectedVal !== "all" && selectedVal !== "") {
-                const schoolName = tsColegio.options[selectedVal].text;
-                // Power BI URL Filter Syntax: &$filter=Table/Column eq 'Value'
-                // We assume Table: bi_mexico and Column: Colegio
-                filterString = `&$filter=bi_mexico/Colegio eq '${schoolName}'`;
-            }
-
-            console.log("Applying Filter:", filterString);
-
-            // Update all iframes
-            document.getElementById('iframe-gap').src = baseUrl + filterString;
-            document.getElementById('iframe-rank').src = baseUrl + filterString;
-            document.getElementById('iframe-trend').src = baseUrl + filterString;
-
-            // Optional: Simulate KPI updates
-            const factor = selectedVal === "all" ? 1 : 0.4 + Math.random();
-            document.getElementById('val-total').innerHTML = Math.round(214.9 * factor) + "K";
-            document.getElementById('val-unique').innerHTML = Math.round(37997 * factor).toLocaleString();
-        }
-
-        tsColegio.on('change', updateFilters);
-    </script>
 </body>
 </html>
