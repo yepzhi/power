@@ -125,6 +125,30 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         footer { margin-top: 60px; padding: 40px 0; text-align: center; border-top: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.8rem; }
+
+        /* ── Metric Pills ── */
+        .pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        .pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 126, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+            border-color: var(--primary);
+        }
+        .pill svg {
+            color: var(--accent);
+            width: 16px; height: 16px;
+        }
     </style>
 </head>
 <body>
@@ -132,9 +156,16 @@
     <div class="dashboard-container">
         
         <header>
-            <div class="header-title">
+            <div class="header-title" style="width: 100%;">
                 <h1>Power <span>Intelligence</span></h1>
                 <p>Richmond Pro Premium Analytics Console</p>
+                
+                <div class="metrics-pills" style="display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap;">
+                    <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> View Assignments by Teacher</div>
+                    <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> View Tests by Teacher</div>
+                    <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Activities by Student</div>
+                    <div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> More Active Hours and Devices</div>
+                </div>
             </div>
         </header>
 
@@ -142,12 +173,7 @@
         <div id="tab-operational">
             <div class="grid-main">
                 <div class="card full-card">
-                    <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                        <h3 class="card-title" style="font-size: 1.1rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg> View Assignments by Teacher</h3>
-                        <h3 class="card-title" style="font-size: 1.1rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg> View Tests by Teacher</h3>
-                        <h3 class="card-title" style="font-size: 1.1rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg> Activities by Student</h3>
-                        <h3 class="card-title" style="font-size: 1.1rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg> More Active Hours and Devices</h3>
-                    </div>
+
                     <div class="iframe-wrapper" style="aspect-ratio: 21/9;">
                         <iframe id="iframe-trend" title="Tablero_RLP" src="https://app.powerbi.com/reportEmbed?reportId=29053dbc-bcd3-4fa1-9152-2587af720778&autoAuth=true&ctid=7516bb18-282c-4e63-b1ec-795805f1e8fd&actionBarEnabled=true" allowFullScreen="true"></iframe>
                     </div>
